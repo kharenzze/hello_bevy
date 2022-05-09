@@ -1,50 +1,46 @@
 use bevy::prelude::*;
 
 #[derive(Component)]
-struct Person;
-
-#[derive(Component)]
 struct Name(String);
-
-fn add_people(mut commands: Commands) {
-  commands
-    .spawn()
-    .insert(Person)
-    .insert(Name("Elaina Proctor".to_string()));
-  commands
-    .spawn()
-    .insert(Person)
-    .insert(Name("Renzo Hume".to_string()));
-  commands
-    .spawn()
-    .insert(Person)
-    .insert(Name("Zayna Nieves".to_string()));
-}
 
 fn main() {
   App::new()
+    .add_startup_system(setup)
     .add_plugins(DefaultPlugins)
-    .add_plugin(HelloPlugin)
+    .add_plugin(PlayerPlugin)
     .run();
 }
 
-pub struct HelloPlugin;
+pub struct PlayerPlugin;
 
-impl Plugin for HelloPlugin {
+impl Plugin for PlayerPlugin {
   fn build(&self, app: &mut App) {
-    app
-      .insert_resource(GreetTimer(Timer::from_seconds(2.0, true)))
-      .add_startup_system(add_people)
-      .add_system(greet_people);
+    app.add_system(PlayerPlugin::player_system);
   }
 }
 
-struct GreetTimer(Timer);
+#[derive(Component)]
+struct Player;
 
-fn greet_people(time: Res<Time>, mut timer: ResMut<GreetTimer>, query: Query<&Name, With<Person>>) {
-  if timer.0.tick(time.delta()).just_finished() {
-    for name in query.iter() {
-      println!("hello {}!", name.0);
+impl PlayerPlugin {
+  fn player_system(query: Query<(&Name, &Transform), With<Player>>) {
+    for p in query.iter() {
+      println!("{}", &p.0 .0);
     }
   }
+}
+
+fn setup(mut commands: Commands) {
+  commands.spawn_bundle(OrthographicCameraBundle::new_2d());
+  commands
+    .spawn_bundle(SpriteBundle {
+      sprite: Sprite {
+        color: Color::rgb(0.25, 0.25, 0.75),
+        custom_size: Some(Vec2::new(50.0, 50.0)),
+        ..default()
+      },
+      ..default()
+    })
+    .insert(Player)
+    .insert(Name("MyPlayer".to_string()));
 }
