@@ -6,9 +6,6 @@ use bevy::prelude::*;
 use components::target::TargetPosition;
 use plugins::camera::CameraPlugin;
 
-#[derive(Component)]
-struct Name(String);
-
 fn main() {
   App::new()
     .add_startup_system(setup)
@@ -32,9 +29,9 @@ struct Player;
 impl PlayerPlugin {
   fn player_system(
     mouse: Res<Input<MouseButton>>,
-    mut query: Query<(&Name, &mut Transform, &mut TargetPosition), With<Player>>,
+    mut query: Query<(&mut Transform, &mut TargetPosition), With<Player>>,
   ) {
-    for (name, mut transform, mut target_pos) in query.iter_mut() {
+    for (mut transform, mut target_pos) in query.iter_mut() {
       if mouse.just_pressed(MouseButton::Left) {
         let a: Vec<_> = mouse.get_just_pressed().collect();
         let b = a.get(0).unwrap();
@@ -57,6 +54,5 @@ fn setup(mut commands: Commands) {
       ..default()
     })
     .insert(TargetPosition::default())
-    .insert(Player)
-    .insert(Name("MyPlayer".to_string()));
+    .insert(Player);
 }
