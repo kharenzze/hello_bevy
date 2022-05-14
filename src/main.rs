@@ -1,4 +1,6 @@
 mod components;
+mod plugins;
+mod resources;
 
 use bevy::prelude::*;
 use components::target::TargetPosition;
