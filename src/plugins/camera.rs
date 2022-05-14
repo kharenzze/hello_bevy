@@ -41,7 +41,6 @@ fn camera_system(
     let ndc_to_world = camera_transform.compute_matrix() * camera.projection_matrix.inverse();
     let world_pos = ndc_to_world.project_point3(ndc.extend(-1.0));
     let world_pos: Vec2 = world_pos.truncate();
-    println!("{world_pos}");
     mouse_pos.set(world_pos);
   }
 }
