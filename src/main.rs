@@ -1,4 +1,5 @@
 use bevy::prelude::*;
+use std::ops::{Deref, DerefMut};
 
 #[derive(Component)]
 struct Name(String);
@@ -23,8 +24,15 @@ impl Plugin for PlayerPlugin {
 struct Player;
 
 impl PlayerPlugin {
-  fn player_system(mut query: Query<(&Name, &mut Transform), With<Player>>) {
-    for (name, mut transform) in query.iter_mut() {
+  fn player_system(
+    mouse: Res<Input<MouseButton>>,
+    mut query: Query<(&Name, &mut Transform, &mut TargetPosition), With<Player>>,
+  ) {
+    for (name, mut transform, mut target_pos) in query.iter_mut() {
+      if mouse.just_pressed(MouseButton::Left) {
+        let a: Vec<_> = mouse.get_just_pressed().collect();
+        let b = a.get(0).unwrap();
+      }
       transform.translation.x += 2.;
     }
   }
@@ -43,6 +51,24 @@ fn setup(mut commands: Commands) {
       },
       ..default()
     })
+    .insert(TargetPosition::default())
     .insert(Player)
     .insert(Name("MyPlayer".to_string()));
+}
+
+#[derive(Component, Default)]
+struct TargetPosition(Vec3);
+
+impl Deref for TargetPosition {
+  type Target = Vec3;
+
+  fn deref(&self) -> &Self::Target {
+    &self.0
+  }
+}
+
+impl DerefMut for TargetPosition {
+  fn deref_mut(&mut self) -> &mut Self::Target {
+    &mut self.0
+  }
 }
