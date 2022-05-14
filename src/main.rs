@@ -2,9 +2,12 @@ mod components;
 mod plugins;
 mod resources;
 
+use crate::resources::MousePos;
 use bevy::prelude::*;
+use bevy::render::camera::RenderTarget;
 use components::target::TargetPosition;
 use plugins::camera::CameraPlugin;
+use std::ops::Deref;
 
 fn main() {
   App::new()
@@ -26,15 +29,18 @@ impl Plugin for PlayerPlugin {
 #[derive(Component)]
 struct Player;
 
+type PSQuery<'a> = (&'a mut Transform, &'a mut TargetPosition);
 impl PlayerPlugin {
   fn player_system(
     mouse: Res<Input<MouseButton>>,
-    mut query: Query<(&mut Transform, &mut TargetPosition), With<Player>>,
+    mouse_pos: Res<MousePos>,
+    mut query: Query<PSQuery, With<Player>>,
   ) {
-    for (mut transform, mut target_pos) in query.iter_mut() {
+    for q in query.iter_mut() {
+      let (transform, target_pos): PSQuery = q;
       if mouse.just_pressed(MouseButton::Left) {
-        let a: Vec<_> = mouse.get_just_pressed().collect();
-        let b = a.get(0).unwrap();
+        let a: Vec2 = mouse_pos.deref();
+        println!("{}",);
       }
       transform.translation.x += 2.;
     }
