@@ -17,7 +17,9 @@ impl Plugin for CameraPlugin {
 }
 
 fn camera_startup_system(mut cmd: Commands) {
-  cmd.spawn_bundle(OrthographicCameraBundle::new_2d());
+  cmd
+    .spawn_bundle(OrthographicCameraBundle::new_2d())
+    .insert(MainCamera);
 }
 
 type CameraQuery<'a> = (&'a Camera, &'a GlobalTransform);
@@ -39,6 +41,7 @@ fn camera_system(
     let ndc_to_world = camera_transform.compute_matrix() * camera.projection_matrix.inverse();
     let world_pos = ndc_to_world.project_point3(ndc.extend(-1.0));
     let world_pos: Vec2 = world_pos.truncate();
+    println!("{world_pos}");
     mouse_pos.set(world_pos);
   }
 }
