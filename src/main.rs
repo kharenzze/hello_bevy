@@ -4,6 +4,7 @@ mod resources;
 
 use bevy::prelude::*;
 use components::target::TargetPosition;
+use plugins::camera::CameraPlugin;
 
 #[derive(Component)]
 struct Name(String);
@@ -12,6 +13,7 @@ fn main() {
   App::new()
     .add_startup_system(setup)
     .add_plugins(DefaultPlugins)
+    .add_plugin(CameraPlugin)
     .add_plugin(PlayerPlugin)
     .run();
 }
@@ -45,7 +47,6 @@ impl PlayerPlugin {
 const PLAYER_COLOR: Color = Color::rgb(0.25, 0.25, 0.75);
 
 fn setup(mut commands: Commands) {
-  commands.spawn_bundle(OrthographicCameraBundle::new_2d());
   commands
     .spawn_bundle(SpriteBundle {
       sprite: Sprite {
