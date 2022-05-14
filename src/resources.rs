@@ -4,6 +4,12 @@ use std::ops::{Deref, DerefMut};
 #[derive(Default)]
 pub struct MousePos(Vec2);
 
+impl MousePos {
+  pub fn set(&mut self, v: Vec2) {
+    self.0 = v;
+  }
+}
+
 impl Deref for MousePos {
   type Target = Vec2;
 
