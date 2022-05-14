@@ -1,5 +1,7 @@
+mod components;
+
 use bevy::prelude::*;
-use std::ops::{Deref, DerefMut};
+use components::target::TargetPosition;
 
 #[derive(Component)]
 struct Name(String);
@@ -54,21 +56,4 @@ fn setup(mut commands: Commands) {
     .insert(TargetPosition::default())
     .insert(Player)
     .insert(Name("MyPlayer".to_string()));
-}
-
-#[derive(Component, Default)]
-struct TargetPosition(Vec3);
-
-impl Deref for TargetPosition {
-  type Target = Vec3;
-
-  fn deref(&self) -> &Self::Target {
-    &self.0
-  }
-}
-
-impl DerefMut for TargetPosition {
-  fn deref_mut(&mut self) -> &mut Self::Target {
-    &mut self.0
-  }
 }
