@@ -1,3 +1,4 @@
+use crate::resources::MousePos;
 use bevy::prelude::*;
 
 #[derive(Component)]
@@ -7,7 +8,9 @@ pub struct CameraPlugin;
 
 impl Plugin for CameraPlugin {
   fn build(&self, app: &mut App) {
-    app.add_system(camera_system);
+    app
+      .insert_resource(MousePos::default())
+      .add_system(camera_system);
   }
 }
 

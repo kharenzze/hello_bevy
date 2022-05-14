@@ -1,7 +1,8 @@
 use bevy::prelude::*;
 use std::ops::{Deref, DerefMut};
 
-struct MousePos(Vec2);
+#[derive(Default)]
+pub struct MousePos(Vec2);
 
 impl Deref for MousePos {
   type Target = Vec2;
