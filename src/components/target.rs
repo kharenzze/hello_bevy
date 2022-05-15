@@ -1,11 +1,18 @@
 use bevy::prelude::*;
 use std::ops::{Deref, DerefMut};
 
+type Inner = Vec3;
 #[derive(Component, Default)]
-pub struct TargetPosition(Vec3);
+pub struct TargetPosition(Inner);
+
+impl TargetPosition {
+  pub fn set(&mut self, value: Inner) {
+    self.0 = value;
+  }
+}
 
 impl Deref for TargetPosition {
-  type Target = Vec3;
+  type Target = Inner;
 
   fn deref(&self) -> &Self::Target {
     &self.0
