@@ -29,18 +29,16 @@ impl Plugin for PlayerPlugin {
 #[derive(Component)]
 struct Player;
 
-type PSQuery<'a> = (&'a mut Transform, &'a mut TargetPosition);
 impl PlayerPlugin {
   fn player_system(
     mouse: Res<Input<MouseButton>>,
     mouse_pos: Res<MousePos>,
-    mut query: Query<PSQuery, With<Player>>,
+    mut query: Query<(&mut Transform, &mut TargetPosition), With<Player>>,
   ) {
-    for q in query.iter_mut() {
-      let (transform, target_pos): PSQuery = q;
+    for (mut transform, target_pos) in query.iter_mut() {
       if mouse.just_pressed(MouseButton::Left) {
-        let a: Vec2 = mouse_pos.deref();
-        println!("{}",);
+        let mouse_vec: &Vec2 = mouse_pos.deref();
+        target_pos.set(mouse_vec.extend(0.))
       }
       transform.translation.x += 2.;
     }
