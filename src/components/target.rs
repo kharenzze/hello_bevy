@@ -1,7 +1,7 @@
 use bevy::prelude::*;
 use std::ops::{Deref, DerefMut};
 
-type Inner = Vec3;
+type Inner = Vec2;
 #[derive(Component, Default)]
 pub struct TargetPosition(Inner);
 
